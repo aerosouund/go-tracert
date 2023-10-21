@@ -65,7 +65,6 @@ func sendICMPWithTTL(destination string, ttl int) (*icmp.Message, net.Addr, erro
 	}
 
 	return rm, peer, nil
-
 }
 
 func main() {
