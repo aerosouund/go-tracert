@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"time"
 
 	"golang.org/x/net/icmp"
 	"golang.org/x/net/ipv4"
@@ -80,11 +81,14 @@ func main() {
 	fmt.Printf("traceroute to %s, 64 hops max, 32 bytes message\n", inputHost)
 	ttl := 1
 	for {
+		startTime := time.Now()
 		icmpResponse, peer, err := sendICMPWithTTL(host, ttl)
 		if err != nil {
 			panic(err)
 		}
-		fmt.Printf("%d. %s\n", ttl, peer)
+		endTime := time.Now()
+		latency := endTime.Sub(startTime).Milliseconds()
+		fmt.Printf("%d. %s (%d ms)\n", ttl, peer, latency)
 
 		if icmpResponse.Type == ipv4.ICMPTypeTimeExceeded {
 			ttl += 1
